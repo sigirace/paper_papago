@@ -1,13 +1,14 @@
 import re
 import requests
 import json
+from googletrans import Translator
 
 
 CLIENT_ID='CLIENT_ID'
 CLIENT_SECRET='CLIENT_SECRET'
 
 
-class PaperPapago():
+class PaperTranslate():
 
     def __init__(self, source='en', target='ko', file_path='text.txt'):
         self.url = 'https://openapi.naver.com/v1/papago/n2mt'
@@ -39,7 +40,7 @@ class PaperPapago():
 
         return cleaned_sentences
     
-    def translate(self):
+    def ptran(self):
         sentences = self.clean_text()
 
         for sentence in sentences:
@@ -48,3 +49,19 @@ class PaperPapago():
             response = requests.post(self.url, json.dumps(data), headers=self.headers) 
             translatedText = response.json()['message']['result']['translatedText']
             print(translatedText)
+            print("*"*20)
+    
+    def gtran(self):
+        sentences = self.clean_text()
+        translator = Translator()
+
+        for sentence in sentences:
+            print(sentence)
+            translation = translator.translate(sentence, dest=self.target)
+            print(translation.text)
+            print()
+    
+    def word_trans(self, word):
+        translator = Translator()
+        trans_word = translator.translate(word, dest=self.target)
+        print(trans_word.text)
